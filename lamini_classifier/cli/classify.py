@@ -16,6 +16,16 @@ def main():
 
     """
 
+    llm_routing_agent = LaminiClassifier()
+    search_tool_description = "google"
+    ordering_tool_description = "order"
+    no_tool_description = "other"
+    tools = { "search" : search_tool_description,  "order": ordering_tool_description, "noop": no_tool_description }
+    llm_routing_agent.prompt_train(tools)
+
+    llm_routing_agent.add_data_to_class("order", "I'd like to buy a bag of granny smith apples")
+    llm_routing_agent.prompt_train(tools)
+
     # Parse arguments
     parser = argparse.ArgumentParser()
 
@@ -91,8 +101,6 @@ def main():
                 "probabilities": probabilities[i],
             }
         )
-
-
 
 
 main()
