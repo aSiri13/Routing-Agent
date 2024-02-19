@@ -4,6 +4,8 @@ import argparse
 
 from pprint import pprint
 
+from sklearn.linear_model import LogisticRegression
+
 
 def main():
     """This is a program that runs inference using a classifier using the LaminiClassifier class.
@@ -15,16 +17,6 @@ def main():
     It can also be trained on examples of data for each class, and then classify data based on that training.
 
     """
-
-    llm_routing_agent = LaminiClassifier()
-    search_tool_description = "google"
-    ordering_tool_description = "order"
-    no_tool_description = "other"
-    tools = { "search" : search_tool_description,  "order": ordering_tool_description, "noop": no_tool_description }
-    llm_routing_agent.prompt_train(tools)
-
-    llm_routing_agent.add_data_to_class("order", "I'd like to buy a bag of granny smith apples")
-    llm_routing_agent.prompt_train(tools)
 
     # Parse arguments
     parser = argparse.ArgumentParser()
@@ -73,10 +65,11 @@ def main():
     classifier = LaminiClassifier.load(args["load"])
 
     # Get the data to classify
+    # data = []
     data = []
 
-    data += args["data"]
-    data += args["classify"]
+    # data += args["data"]
+    # data += args["classify"]
 
     if len(data) == 0:
         raise Exception("No data to classify.")
@@ -103,5 +96,6 @@ def main():
         )
 
 
-main()
 
+
+main()

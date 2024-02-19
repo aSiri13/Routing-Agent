@@ -6,7 +6,6 @@ from pprint import pprint
 
 import pandas as pd
 
-
 def main():
     """This is a program that trains a classifier using the LaminiClassifier class.
 
@@ -21,13 +20,13 @@ def main():
     # Parse arguments
     parser = argparse.ArgumentParser()
 
-    # Parse the class names and prompts using the format "class_name:prompt"
+    # Parse the class names and prompts using the format "class_name,prompt"
     parser.add_argument(
         "--class",
         type=str,
         nargs="+",
         action="extend",
-        help="The classes to use for classification, in the format 'class_name:prompt'.",
+        help="The classes to use for classification, in the format 'class_name,prompt'.",
         default=[],
     )
 
@@ -56,6 +55,14 @@ def main():
         default=False,
     )
 
+    parser.add_argument(
+        "--api_key", 
+        type=str, 
+        help="76e433b537b1d7781a961639d7da0ab70d704ea7c8b6343626dc587f09c338d3", 
+        default=None
+    )
+
+
     # conert the arguments to a dictionary
     args = vars(parser.parse_args())
 
@@ -66,7 +73,7 @@ def main():
     classes = {}
 
     for class_prompt in args["class"]:
-        class_name, prompt = class_prompt.split(":")
+        class_name, prompt = class_prompt.split(",")
         assert class_name not in classes, f"Class name '{class_name}' already exists."
         classes[class_name] = prompt
 
@@ -78,7 +85,7 @@ def main():
     class_names = classes.keys()
     for _, row in data_df.iterrows():
         if row["class_name"] in class_names:
-            # import pdb; pdb.set_trace()
+            # import pdb; pdb.set_trace() 
             classifier.add_data_to_class(row["class_name"], [row["data"]])
         else:
             print(f"WARNING ------ Class name '{row['class_name']}' not found in classes, skipping.")
@@ -88,6 +95,12 @@ def main():
         pprint(classes)
 
     classifier.prompt_train(classes)
+
+    # search_tool_description = "search"
+    # ordering_tool_description = "ordering"
+    # no_tool_description = "noop"
+    # tools = { "search" : search_tool_description,  "order": ordering_tool_description, "noop": no_tool_description }
+    # classifier.prompt_train(tools)
 
     if args["verbose"]:
         pprint(classifier.get_data())
