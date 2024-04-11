@@ -4,6 +4,10 @@
 # Vision tool implementation based on GPT-4.
 #
 
+from .vision import Vision
+from .gpt4vision import GPT4Vision
+from .claude_vision import ClaudeVision
+
 import base64
 from typing import Dict
 
@@ -52,3 +56,5 @@ class GPT4Vision(Vision):
         return response.choices[0].message.content
     
 Vision.register(GPT4Vision)
+
+
